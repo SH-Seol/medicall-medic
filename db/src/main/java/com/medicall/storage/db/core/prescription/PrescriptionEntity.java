@@ -4,28 +4,39 @@ import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class PrescriptionEntity extends BaseEntity {
-    // 환자 정보 (예: Patient 엔티티와 ManyToOne 관계)
+
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private PatientEntity patient;
 
-    // 의사 정보 (예: Doctor 엔티티와 ManyToOne 관계)
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorEntity doctor;
 
     @OneToMany(mappedBy = "prescription_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<PrescriptionMedicineEntity> PrescriptionMedicineList;
+    List<PrescriptionMedicineEntity> PrescriptionMedicineList = new ArrayList<>();
+
+    @Column(nullable = false)
+    private LocalDate prescriptionDate;
 
     protected PrescriptionEntity() {}
+
+    public PrescriptionEntity(PatientEntity patient, DoctorEntity doctor, LocalDate prescriptionDate) {
+        this.patient = patient;
+        this.doctor = doctor;
+        this.prescriptionDate = prescriptionDate;
+    }
 
     public PatientEntity getPatient() {
         return patient;
@@ -33,5 +44,13 @@ public class PrescriptionEntity extends BaseEntity {
 
     public DoctorEntity getDoctor() {
         return doctor;
+    }
+
+    public LocalDate getPrescriptionDate() {
+        return prescriptionDate;
+    }
+
+    public List<PrescriptionMedicineEntity> getPrescriptionMedicineList() {
+        return PrescriptionMedicineList;
     }
 }

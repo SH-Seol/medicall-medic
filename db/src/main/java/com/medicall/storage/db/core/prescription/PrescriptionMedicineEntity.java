@@ -5,15 +5,18 @@ import com.medicall.storage.db.core.medicine.MedicineEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
 public class PrescriptionMedicineEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicine_id", nullable = false)
     private MedicineEntity medicine;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prescription_id", nullable = false)
     private PrescriptionEntity prescription;
 
     //처방된 용량
@@ -35,6 +38,11 @@ public class PrescriptionMedicineEntity extends BaseEntity {
     private String instruction;
 
     protected PrescriptionMedicineEntity() {}
+
+    public PrescriptionMedicineEntity(MedicineEntity medicine, PrescriptionEntity prescription){
+        this.medicine = medicine;
+        this.prescription = prescription;
+    }
 
     public MedicineEntity getMedicine() {
         return medicine;

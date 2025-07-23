@@ -16,6 +16,12 @@ public class MedicineEntity extends BaseEntity {
 
     protected MedicineEntity() {}
 
+    public MedicineEntity(String name, String manufacturer, String unit) {
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.unit = unit;
+    }
+
     public String getName() {
         return name;
     }
