@@ -1,12 +1,16 @@
 package com.medicall.storage.db.core.patient;
 
+import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.Gender;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class PatientEntity extends BaseEntity {
@@ -27,6 +31,9 @@ public class PatientEntity extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDate dateOfBirth;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AddressEntity> addresses;
 
     private String emergencyContactName;
     private String emergencyContactRelationship;

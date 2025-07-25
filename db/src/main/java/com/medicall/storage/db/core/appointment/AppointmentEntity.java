@@ -1,15 +1,19 @@
 package com.medicall.storage.db.core.appointment;
 
+import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.AppointmentStatus;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,6 +29,10 @@ public class AppointmentEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String symptom;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", nullable = false)
+    private AddressEntity patientAddress;
 
     @Column(nullable = false)
     private LocalDateTime reservationTime;
