@@ -6,6 +6,8 @@ import com.medicall.storage.db.core.department.DoctorDepartmentEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 
@@ -16,15 +18,17 @@ public class DoctorEntity extends BaseEntity {
 
     private String imageUrl;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DoctorDepartmentEntity> departments;
+    private String introduction;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DoctorDepartmentEntity departments;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AppointmentEntity> appointments;
 
     protected DoctorEntity() {}
 
-    public DoctorEntity(String name, String imageUrl, List<DoctorDepartmentEntity> departments) {
+    public DoctorEntity(String name, String imageUrl, DoctorDepartmentEntity departments) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.departments = departments;
@@ -38,11 +42,18 @@ public class DoctorEntity extends BaseEntity {
         return imageUrl;
     }
 
-    public List<DoctorDepartmentEntity> getDepartments() {
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public DoctorDepartmentEntity getDepartments() {
         return departments;
     }
 
     public List<AppointmentEntity> getAppointments() {
         return appointments;
     }
+
+
+
 }
