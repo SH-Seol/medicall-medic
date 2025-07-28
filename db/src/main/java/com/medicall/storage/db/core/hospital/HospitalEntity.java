@@ -2,6 +2,7 @@ package com.medicall.storage.db.core.hospital;
 
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
+import com.medicall.storage.db.core.common.enums.RegistrationStatus;
 import com.medicall.storage.db.core.department.HospitalDepartmentEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,6 +22,8 @@ public class HospitalEntity extends BaseEntity {
     @Column(nullable = false)
     private String telephoneNumber;
 
+    private String imageUrl;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false)
     private AddressEntity address;
@@ -28,11 +31,16 @@ public class HospitalEntity extends BaseEntity {
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospitalDepartmentEntity> departments;
 
+    @Column(nullable = false)
+    private RegistrationStatus registrationStatus;
+
     protected HospitalEntity() {}
 
-    public HospitalEntity(String name, String telephoneNumber, AddressEntity address) {
+    public HospitalEntity(String name, String telephoneNumber, AddressEntity address, String imageUrl) {
         this.name = name;
         this.telephoneNumber = telephoneNumber;
         this.address = address;
+        this.imageUrl = imageUrl;
+        this.registrationStatus = RegistrationStatus.PENDING;
     }
 }
