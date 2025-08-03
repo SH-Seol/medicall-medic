@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class HospitalEntity extends BaseEntity {
     private AddressEntity address;
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HospitalDepartmentEntity> departments;
+    private final List<HospitalDepartmentEntity> departments = new ArrayList<>();
 
     @Column(nullable = false)
     private RegistrationStatus registrationStatus;
@@ -42,5 +43,37 @@ public class HospitalEntity extends BaseEntity {
         this.address = address;
         this.imageUrl = imageUrl;
         this.registrationStatus = RegistrationStatus.PENDING;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public AddressEntity getAddress() {
+        return address;
+    }
+
+    public List<HospitalDepartmentEntity> getDepartments() {
+        return departments;
+    }
+
+    public RegistrationStatus getRegistrationStatus() {
+        return registrationStatus;
+    }
+
+    public void addDepartments(List<HospitalDepartmentEntity> departments) {
+        this.departments.addAll(departments);
+    }
+
+    public void addDepartment(HospitalDepartmentEntity department) {
+        this.departments.add(department);
     }
 }
