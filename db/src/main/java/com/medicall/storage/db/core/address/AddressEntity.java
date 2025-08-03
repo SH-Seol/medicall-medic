@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.address;
 
+import com.medicall.domain.address.Address;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,5 +73,16 @@ public class AddressEntity extends BaseEntity {
 
     public Double getLatitude() {
         return latitude;
+    }
+
+    public Address toDomainModel(){
+        return new Address(
+                getZoneCode(),
+                getRoadAddress(),
+                getJibunAddress(),
+                getDetailAddress(),
+                getBuildingName(),
+                getLongitude(),
+                getLatitude());
     }
 }

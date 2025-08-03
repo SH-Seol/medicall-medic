@@ -3,6 +3,7 @@ package com.medicall.domain.doctor;
 import com.medicall.domain.department.Department;
 import com.medicall.domain.department.DepartmentReader;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,5 +24,9 @@ public class DoctorService {
         Department department = departmentReader.findById(newDoctor.departmentId()).orElse(null);
         Doctor doctorToCreate = new Doctor(newDoctor.name(), newDoctor.introduction(), newDoctor.imageUrl(), department);
         return doctorWriter.createDoctor(doctorToCreate);
+    }
+
+    public List<Appointment> getDoctorAppointments(Doctor doctor){
+        return doctorReader.getDoctorAppointments(doctor);
     }
 }

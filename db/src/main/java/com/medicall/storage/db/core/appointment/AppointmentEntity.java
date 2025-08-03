@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.appointment;
 
+import com.medicall.domain.doctor.Appointment;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.AppointmentStatus;
@@ -64,5 +65,22 @@ public class AppointmentEntity extends BaseEntity {
 
     public LocalDateTime getReservationTime() {
         return reservationTime;
+    }
+
+    public AddressEntity getPatientAddress() {
+        return patientAddress;
+    }
+
+    public AppointmentStatus getStatus() {
+        return status;
+    }
+
+    public Appointment toDomainModel(){
+        return new Appointment(
+                getPatient().getName(),
+                getPatientAddress().toDomainModel(),
+                getSymptom(),
+                getReservationTime()
+                );
     }
 }
