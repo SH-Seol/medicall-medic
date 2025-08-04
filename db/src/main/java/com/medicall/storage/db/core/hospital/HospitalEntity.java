@@ -1,6 +1,7 @@
 package com.medicall.storage.db.core.hospital;
 
 import com.medicall.storage.db.core.address.AddressEntity;
+import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.RegistrationStatus;
 import com.medicall.storage.db.core.department.DepartmentEntity;
@@ -33,10 +34,17 @@ public class HospitalEntity extends BaseEntity {
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<HospitalDepartmentEntity> departments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<AppointmentEntity> appointments = new ArrayList<>();
+
     @Column(nullable = false)
     private RegistrationStatus registrationStatus;
 
     protected HospitalEntity() {}
+
+    public List<AppointmentEntity> getAppointments() {
+        return appointments;
+    }
 
     public HospitalEntity(String name, String telephoneNumber, AddressEntity address, String imageUrl) {
         this.name = name;

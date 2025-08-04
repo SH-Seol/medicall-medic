@@ -7,6 +7,7 @@ import com.medicall.domain.hospital.HospitalRepository;
 import com.medicall.domain.hospital.NewHospital;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.address.AddressJpaRepository;
+import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.department.DepartmentEntity;
 import com.medicall.storage.db.core.department.DepartmentJpaRepository;
 import com.medicall.storage.db.core.department.HospitalDepartmentEntity;
@@ -54,5 +55,15 @@ public class HospitalCoreRepository implements HospitalRepository {
     }
     public Optional<Hospital> findById(Long id){
         return null;
+    }
+
+    public List<Appointment> findAppointmentsByHospitalId(Long hospitalId){
+        List<AppointmentEntity> appointmentEntities = hospitalJpaRepository.findById(hospitalId).get().getAppointments();
+
+        if(appointmentEntities == null){
+            return List.of();
+        }
+
+        return appointmentEntities.stream().map(AppointmentEntity::toDomainModel).toList();
     }
 }
