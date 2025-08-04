@@ -1,6 +1,7 @@
 package com.medicall.storage.db.core.hospital;
 
 
+import com.medicall.domain.doctor.Appointment;
 import com.medicall.domain.hospital.Hospital;
 import com.medicall.domain.hospital.HospitalRepository;
 import com.medicall.domain.hospital.NewHospital;
@@ -43,11 +44,7 @@ public class HospitalCoreRepository implements HospitalRepository {
                 addressEntity,
                 newHospital.imageUrl());
 
-        List<HospitalDepartmentEntity> hospitalDepartments = departmentEntities.stream()
-                .map(departmentEntity -> new HospitalDepartmentEntity(savedHospitalEntity, departmentEntity))
-                .collect(Collectors.toList());
-
-        savedHospitalEntity.addDepartments(hospitalDepartments);
+        savedHospitalEntity.addDepartments(departmentEntities);
 
         return hospitalJpaRepository.save(savedHospitalEntity).getId();
     }

@@ -3,6 +3,7 @@ package com.medicall.storage.db.core.hospital;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.RegistrationStatus;
+import com.medicall.storage.db.core.department.DepartmentEntity;
 import com.medicall.storage.db.core.department.HospitalDepartmentEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -69,11 +70,12 @@ public class HospitalEntity extends BaseEntity {
         return registrationStatus;
     }
 
-    public void addDepartments(List<HospitalDepartmentEntity> departments) {
-        this.departments.addAll(departments);
+    public void addDepartments(List<DepartmentEntity> departments) {
+        departments.forEach(this::addDepartment);
     }
 
-    public void addDepartment(HospitalDepartmentEntity department) {
-        this.departments.add(department);
+    public void addDepartment(DepartmentEntity department) {
+        HospitalDepartmentEntity hospitalDepartmentEntity = new HospitalDepartmentEntity(this, department);
+        departments.add(hospitalDepartmentEntity);
     }
 }
