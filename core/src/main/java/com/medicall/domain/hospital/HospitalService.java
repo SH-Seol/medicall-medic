@@ -1,10 +1,12 @@
 package com.medicall.domain.hospital;
 
 import com.medicall.domain.doctor.Appointment;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class HospitalService {
 
     private final HospitalReader hospitalReader;
@@ -22,5 +24,9 @@ public class HospitalService {
     //예약 조회
     public List<Appointment> getAppointments(Long hospitalId) {
         return hospitalReader.getAppointments(hospitalId);
+    }
+
+    public void rejectAppointment(Long hospitalId, Long appointmentId) {
+        hospitalWriter.rejectAppointment(hospitalId, appointmentId);
     }
 }

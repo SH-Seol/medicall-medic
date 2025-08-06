@@ -8,25 +8,27 @@ import com.medicall.domain.hospital.NewHospital;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.address.AddressJpaRepository;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
+import com.medicall.storage.db.core.appointment.AppointmentJpaRepository;
 import com.medicall.storage.db.core.department.DepartmentEntity;
 import com.medicall.storage.db.core.department.DepartmentJpaRepository;
-import com.medicall.storage.db.core.department.HospitalDepartmentEntity;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class HospitalCoreRepository implements HospitalRepository {
 
     private final HospitalJpaRepository hospitalJpaRepository;
     private final AddressJpaRepository addressJpaRepository;
     private final DepartmentJpaRepository departmentJpaRepository;
+    private final AppointmentJpaRepository appointmentJpaRepository;
 
     public HospitalCoreRepository(HospitalJpaRepository hospitalJpaRepository,
                                   AddressJpaRepository addressJpaRepository,
-                                  DepartmentJpaRepository departmentJpaRepository) {
+                                  DepartmentJpaRepository departmentJpaRepository,
+                                  AppointmentJpaRepository appointmentJpaRepository) {
         this.hospitalJpaRepository = hospitalJpaRepository;
         this.addressJpaRepository = addressJpaRepository;
         this.departmentJpaRepository = departmentJpaRepository;
+        this.appointmentJpaRepository = appointmentJpaRepository;
     }
     public Long save(NewHospital newHospital){
         AddressEntity addressEntity = new AddressEntity(newHospital.address().zoneCode(),
@@ -65,5 +67,12 @@ public class HospitalCoreRepository implements HospitalRepository {
         }
 
         return appointmentEntities.stream().map(AppointmentEntity::toDomainModel).toList();
+    }
+
+    public void rejectAppointmentById(Long hospitalId, Long appointmentId){
+        AppointmentEntity appointmentEntity = appointmentJpaRepository.findById(appointmentId).orElseThrow();
+        if(appointmentEntity.getHospital().getId().equals(hospitalId)){
+            appointmentEntity.rejectAppointment();
+        }
     }
 }

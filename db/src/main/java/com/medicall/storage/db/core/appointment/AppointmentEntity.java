@@ -5,6 +5,7 @@ import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.AppointmentStatus;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
+import com.medicall.storage.db.core.hospital.HospitalEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -27,6 +28,10 @@ public class AppointmentEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private DoctorEntity doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private HospitalEntity hospital;
 
     @Column(nullable = false)
     private String symptom;
@@ -75,6 +80,10 @@ public class AppointmentEntity extends BaseEntity {
         return status;
     }
 
+    public HospitalEntity getHospital() {
+        return hospital;
+    }
+
     public Appointment toDomainModel(){
         return new Appointment(
                 getPatient().getName(),
@@ -82,5 +91,12 @@ public class AppointmentEntity extends BaseEntity {
                 getSymptom(),
                 getReservationTime()
                 );
+    }
+
+    public void rejectAppointment(){
+        if(this.status.equals(AppointmentStatus.REQUESTED)){
+            this.status = AppointmentStatus.REJECTED;
+        }
+        throw new IllegalArgumentException("거절할 수 없는 예약입니다.");
     }
 }

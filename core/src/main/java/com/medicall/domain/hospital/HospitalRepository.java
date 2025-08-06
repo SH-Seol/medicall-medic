@@ -9,4 +9,5 @@ public interface HospitalRepository {
     Optional<Hospital> findByName(String name);
     Optional<Hospital> findById(Long id);
     List<Appointment> findAppointmentsByHospitalId(Long id);
+    void rejectAppointmentById(Long hospitalId, Long appointmentId);
 }

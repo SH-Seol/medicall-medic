@@ -11,4 +11,8 @@ public class HospitalWriter {
     public Long create(NewHospital newHospital) {
         return hospitalRepository.save(newHospital);
     }
+
+    public void rejectAppointment(Long hospitalId, Long appointmentId) {
+        hospitalRepository.rejectAppointmentById(hospitalId, appointmentId);
+    }
 }
