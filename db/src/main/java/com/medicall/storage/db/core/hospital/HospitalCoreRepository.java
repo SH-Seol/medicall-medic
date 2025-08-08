@@ -1,34 +1,35 @@
 package com.medicall.storage.db.core.hospital;
 
 
-import com.medicall.domain.doctor.Appointment;
+import com.medicall.domain.appointment.Appointment;
 import com.medicall.domain.hospital.Hospital;
 import com.medicall.domain.hospital.HospitalRepository;
 import com.medicall.domain.hospital.NewHospital;
 import com.medicall.storage.db.core.address.AddressEntity;
-import com.medicall.storage.db.core.address.AddressJpaRepository;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.appointment.AppointmentJpaRepository;
 import com.medicall.storage.db.core.department.DepartmentEntity;
 import com.medicall.storage.db.core.department.DepartmentJpaRepository;
+import com.medicall.storage.db.core.doctor.DoctorEntity;
+import com.medicall.storage.db.core.doctor.DoctorJpaRepository;
 import java.util.List;
 import java.util.Optional;
 
 public class HospitalCoreRepository implements HospitalRepository {
 
     private final HospitalJpaRepository hospitalJpaRepository;
-    private final AddressJpaRepository addressJpaRepository;
     private final DepartmentJpaRepository departmentJpaRepository;
     private final AppointmentJpaRepository appointmentJpaRepository;
+    private final DoctorJpaRepository doctorJpaRepository;
 
     public HospitalCoreRepository(HospitalJpaRepository hospitalJpaRepository,
-                                  AddressJpaRepository addressJpaRepository,
                                   DepartmentJpaRepository departmentJpaRepository,
-                                  AppointmentJpaRepository appointmentJpaRepository) {
+                                  AppointmentJpaRepository appointmentJpaRepository,
+                                  DoctorJpaRepository doctorJpaRepository) {
         this.hospitalJpaRepository = hospitalJpaRepository;
-        this.addressJpaRepository = addressJpaRepository;
         this.departmentJpaRepository = departmentJpaRepository;
         this.appointmentJpaRepository = appointmentJpaRepository;
+        this.doctorJpaRepository = doctorJpaRepository;
     }
     public Long save(NewHospital newHospital){
         AddressEntity addressEntity = new AddressEntity(newHospital.address().zoneCode(),
@@ -74,5 +75,13 @@ public class HospitalCoreRepository implements HospitalRepository {
         if(appointmentEntity.getHospital().getId().equals(hospitalId)){
             appointmentEntity.rejectAppointment();
         }
+    }
+
+    public Long addDoctorOnAppointment(Long doctorId, Long appointmentId){
+        AppointmentEntity appointmentEntity = appointmentJpaRepository.findById(appointmentId).orElseThrow();
+        DoctorEntity doctorEntity = doctorJpaRepository.findById(doctorId).orElseThrow();
+        appointmentEntity.addDoctor(doctorEntity);
+
+        return appointmentId;
     }
 }

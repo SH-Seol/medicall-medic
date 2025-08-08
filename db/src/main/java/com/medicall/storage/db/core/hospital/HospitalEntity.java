@@ -90,6 +90,7 @@ public class HospitalEntity extends BaseEntity {
 
     public Hospital toDomainModel(){
         return new Hospital(
+                this.id,
                 this.name,
                 this.telephoneNumber,
                 this.address.toDomainModel(),

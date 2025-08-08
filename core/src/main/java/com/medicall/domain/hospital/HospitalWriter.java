@@ -15,4 +15,8 @@ public class HospitalWriter {
     public void rejectAppointment(Long hospitalId, Long appointmentId) {
         hospitalRepository.rejectAppointmentById(hospitalId, appointmentId);
     }
+
+    public Long addDoctorOnAppointment(Long doctorId, Long appointmentId) {
+        return hospitalRepository.addDoctorOnAppointment(doctorId, appointmentId);
+    }
 }

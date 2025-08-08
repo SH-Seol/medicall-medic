@@ -1,6 +1,6 @@
 package com.medicall.domain.hospital;
 
-import com.medicall.domain.doctor.Appointment;
+import com.medicall.domain.appointment.Appointment;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
