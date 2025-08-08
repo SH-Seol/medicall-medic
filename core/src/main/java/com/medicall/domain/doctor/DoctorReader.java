@@ -1,5 +1,6 @@
 package com.medicall.domain.doctor;
 
+import com.medicall.domain.appointment.Appointment;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -14,5 +15,9 @@ public class DoctorReader {
 
     public List<Appointment> getDoctorAppointments(Doctor doctor) {
         return doctorRepository.getAppointmentsByDoctor(doctor);
+    }
+
+    public Doctor getDoctorById(Long doctorId){
+        return doctorRepository.getDoctorById(doctorId);
     }
 }

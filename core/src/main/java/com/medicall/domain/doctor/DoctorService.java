@@ -1,5 +1,6 @@
 package com.medicall.domain.doctor;
 
+import com.medicall.domain.appointment.Appointment;
 import com.medicall.domain.department.Department;
 import com.medicall.domain.department.DepartmentReader;
 import jakarta.transaction.Transactional;
@@ -28,5 +29,9 @@ public class DoctorService {
 
     public List<Appointment> getDoctorAppointments(Doctor doctor){
         return doctorReader.getDoctorAppointments(doctor);
+    }
+
+    public Doctor getDoctorById(Long doctorId){
+        return doctorReader.getDoctorById(doctorId);
     }
 }

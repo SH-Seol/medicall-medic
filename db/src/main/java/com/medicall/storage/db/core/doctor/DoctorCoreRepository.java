@@ -1,6 +1,6 @@
 package com.medicall.storage.db.core.doctor;
 
-import com.medicall.domain.doctor.Appointment;
+import com.medicall.domain.appointment.Appointment;
 import com.medicall.domain.doctor.Doctor;
 import com.medicall.domain.doctor.DoctorRepository;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
@@ -38,5 +38,9 @@ public class DoctorCoreRepository implements DoctorRepository {
         return doctorEntity.get().getAppointments().stream()
                 .map(AppointmentEntity::toDomainModel)
                 .toList();
+    }
+
+    public Doctor getDoctorById(Long doctorId) {
+        return doctorJpaRepository.findById(doctorId).get().toDomainModel();
     }
 }
