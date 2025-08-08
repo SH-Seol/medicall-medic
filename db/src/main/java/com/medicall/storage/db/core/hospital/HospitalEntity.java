@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.hospital;
 
+import com.medicall.domain.hospital.Hospital;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
@@ -85,5 +86,15 @@ public class HospitalEntity extends BaseEntity {
     public void addDepartment(DepartmentEntity department) {
         HospitalDepartmentEntity hospitalDepartmentEntity = new HospitalDepartmentEntity(this, department);
         departments.add(hospitalDepartmentEntity);
+    }
+
+    public Hospital toDomainModel(){
+        return new Hospital(
+                this.name,
+                this.telephoneNumber,
+                this.address.toDomainModel(),
+                this.imageUrl,
+                this.departments.stream().map(HospitalDepartmentEntity::getDepartment).map(DepartmentEntity::toDomainModel).toList()
+        );
     }
 }

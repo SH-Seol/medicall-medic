@@ -77,12 +77,13 @@ public class AddressEntity extends BaseEntity {
 
     public Address toDomainModel(){
         return new Address(
-                getZoneCode(),
-                getRoadAddress(),
-                getJibunAddress(),
-                getDetailAddress(),
-                getBuildingName(),
-                getLongitude(),
-                getLatitude());
+                this.zoneCode,
+                this.roadAddress,
+                this.jibunAddress,
+                this.detailAddress,
+                this.buildingName,
+                this.longitude,
+                this.latitude
+        );
     }
 }

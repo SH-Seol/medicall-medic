@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.department;
 
+import com.medicall.domain.department.Department;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,5 +22,9 @@ public class DepartmentEntity extends BaseEntity {
 
     public String getName() {
         return name;
+    }
+
+    public Department toDomainModel(){
+        return new Department(this.id, this.name);
     }
 }

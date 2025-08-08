@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.doctor;
 
+import com.medicall.domain.doctor.Doctor;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.department.DepartmentEntity;
@@ -57,6 +58,13 @@ public class DoctorEntity extends BaseEntity {
         return appointments;
     }
 
-
-
+    public Doctor toDomainModel(){
+        return new Doctor(
+                this.id,
+                this.name,
+                this.introduction,
+                this.imageUrl,
+                this.department.toDomainModel()
+        );
+    }
 }
