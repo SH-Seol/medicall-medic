@@ -20,8 +20,8 @@ public class DoctorCoreRepository implements DoctorRepository {
     }
 
     public Long save(Doctor newDoctor) {
-        DepartmentEntity department = departmentJpaRepository.findById(newDoctor.department()
-                .id()).orElse(null);
+        DepartmentEntity department = departmentJpaRepository.getReferenceById(newDoctor.department()
+                .id());
         DoctorEntity savedDoctor = doctorJpaRepository.save(new DoctorEntity(newDoctor.name(), newDoctor.imageUrl(),
                 newDoctor.introduction(), department));
 
