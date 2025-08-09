@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.treatment;
 
+import com.medicall.domain.treatment.Treatment;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
@@ -55,5 +56,15 @@ public class TreatmentEntity extends BaseEntity {
 
     public String getDetailTreatment() {
         return detailTreatment;
+    }
+
+    public Treatment toDomainModel(){
+        return new Treatment(
+                this.patient.toDomainModel(),
+                this.doctor.getId(),
+                this.symptom,
+                this.treatment,
+                this.detailTreatment
+        );
     }
 }

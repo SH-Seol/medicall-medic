@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.patient;
 
+import com.medicall.domain.Patient.Patient;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.common.enums.Gender;
@@ -10,6 +11,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,6 +36,9 @@ public class PatientEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AddressEntity> addresses;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PatientChronicDiseaseEntity> chronicDiseaseEntities = new ArrayList<>();
 
     private String emergencyContactName;
     private String emergencyContactRelationship;
@@ -102,5 +107,26 @@ public class PatientEntity extends BaseEntity {
 
     public String getName() {
         return name;
+    }
+
+    public List<PatientChronicDiseaseEntity> getChronicDiseaseEntities() {
+        return chronicDiseaseEntities;
+    }
+
+    public List<AddressEntity> getAddresses() {
+        return addresses;
+    }
+
+    public Patient toDomainModel(){
+        return new Patient(this.id,
+                this.name,
+                this.gender.toString(),
+                this.bloodType,
+                this.height,
+                this.weight,
+                this.age,
+                this.chronicDiseaseEntities.stream()
+                        .map(PatientChronicDiseaseEntity::getDisease)
+                        .map(ChronicDiseaseEntity::getName).toList());
     }
 }
