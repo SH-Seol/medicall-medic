@@ -1,6 +1,8 @@
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly 'org.springframework:spring-context'
+    compileOnly 'jakarta.transaction:jakarta.transaction-api'
 }
 
 test {
