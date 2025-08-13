@@ -17,6 +17,9 @@ public class TreatmentService {
     }
 
     //진료 기록 작성
+    public Long addTreatment(Treatment treatment) {
+        return treatmentWriter.addTreatment(treatment);
+    }
 
     //진단 기록 불러오기
     public List<Treatment> getTreatments(Long patientId, Long doctorId) {

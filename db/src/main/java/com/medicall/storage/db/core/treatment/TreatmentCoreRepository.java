@@ -4,7 +4,10 @@ import static com.medicall.storage.db.core.treatment.QTreatmentEntity.treatmentE
 
 import com.medicall.domain.treatment.Treatment;
 import com.medicall.domain.treatment.TreatmentRepository;
+import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.doctor.DoctorJpaRepository;
+import com.medicall.storage.db.core.patient.PatientEntity;
+import com.medicall.storage.db.core.patient.PatientJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 
@@ -12,13 +15,16 @@ public class TreatmentCoreRepository implements TreatmentRepository {
 
     private final TreatmentJpaRepository treatmentJpaRepository;
     private final DoctorJpaRepository doctorJpaRepository;
+    private final PatientJpaRepository patientJpaRepository;
     private final JPAQueryFactory queryFactory;
 
     public TreatmentCoreRepository(TreatmentJpaRepository treatmentJpaRepository,
                                    DoctorJpaRepository doctorJpaRepository,
+                                   PatientJpaRepository patientJpaRepository,
                                    JPAQueryFactory queryFactory) {
         this.treatmentJpaRepository = treatmentJpaRepository;
         this.doctorJpaRepository = doctorJpaRepository;
+        this.patientJpaRepository = patientJpaRepository;
         this.queryFactory = queryFactory;
     }
 
@@ -33,6 +39,16 @@ public class TreatmentCoreRepository implements TreatmentRepository {
     }
 
     public Long saveTreatment(Treatment treatment) {
-        return null;
+        PatientEntity patientEntity = patientJpaRepository.getReferenceById(treatment.patient()
+                .id());
+        DoctorEntity doctorEntity = doctorJpaRepository.getReferenceById(treatment.doctor().id());
+        TreatmentEntity treatmentEntity = new TreatmentEntity(
+                patientEntity,
+                doctorEntity,
+                treatment.symptoms(),
+                treatment.treatment(),
+                treatment.detailedTreatment());
+
+        return treatmentJpaRepository.save(treatmentEntity).getId();
     }
 }

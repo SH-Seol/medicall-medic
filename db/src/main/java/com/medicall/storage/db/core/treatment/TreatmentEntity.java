@@ -31,11 +31,12 @@ public class TreatmentEntity extends BaseEntity {
 
     protected TreatmentEntity() {}
 
-    public TreatmentEntity(PatientEntity patient, DoctorEntity doctor,String symptom, String treatment) {
+    public TreatmentEntity(PatientEntity patient, DoctorEntity doctor, String symptom, String treatment, String detailTreatment) {
         this.patient = patient;
         this.doctor = doctor;
         this.symptom = symptom;
         this.treatment = treatment;
+        this.detailTreatment = detailTreatment;
     }
 
     public PatientEntity getPatient() {
@@ -61,7 +62,7 @@ public class TreatmentEntity extends BaseEntity {
     public Treatment toDomainModel(){
         return new Treatment(
                 this.patient.toDomainModel(),
-                this.doctor.getId(),
+                this.doctor.toDomainModel(),
                 this.symptom,
                 this.treatment,
                 this.detailTreatment

@@ -1,10 +1,11 @@
 package com.medicall.domain.treatment;
 
 import com.medicall.domain.Patient.Patient;
+import com.medicall.domain.doctor.Doctor;
 
 public record Treatment(
         Patient patient,
-        Long doctorId,
+        Doctor doctor,
         String symptoms,
         String treatment,
         String detailedTreatment
