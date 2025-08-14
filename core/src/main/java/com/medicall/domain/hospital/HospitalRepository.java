@@ -2,7 +2,6 @@ package com.medicall.domain.hospital;
 
 import com.medicall.domain.appointment.Appointment;
 import java.util.List;
-import java.util.Optional;
 
 public interface HospitalRepository {
     Long save(NewHospital newHospital, List<OperatingTime> operatingTimes);
