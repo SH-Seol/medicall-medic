@@ -13,7 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
-public class OperatingTimesEntity extends BaseEntity {
+public class OperatingTimeEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital", nullable = false)
@@ -36,14 +36,14 @@ public class OperatingTimesEntity extends BaseEntity {
     @Column(nullable = false)
     private boolean isClosed;
 
-    protected OperatingTimesEntity() {}
+    protected OperatingTimeEntity() {}
 
-    public OperatingTimesEntity(HospitalEntity hospital,
-                                DayOfWeek dayOfWeek,
-                                LocalTime openingTime,
-                                LocalTime closingTime,
-                                LocalTime breakStartTime,
-                                LocalTime breakFinishTime){
+    public OperatingTimeEntity(HospitalEntity hospital,
+                               DayOfWeek dayOfWeek,
+                               LocalTime openingTime,
+                               LocalTime closingTime,
+                               LocalTime breakStartTime,
+                               LocalTime breakFinishTime){
         this.hospital = hospital;
         this.dayOfWeek = dayOfWeek;
         this.openingTime = openingTime;

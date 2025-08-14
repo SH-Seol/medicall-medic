@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-public class HolidaysOperatingTimesEntity extends BaseEntity {
+public class HolidayOperatingTimeEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital", nullable = false)
@@ -59,10 +59,10 @@ public class HolidaysOperatingTimesEntity extends BaseEntity {
         return hospital;
     }
 
-    protected HolidaysOperatingTimesEntity() {}
+    protected HolidayOperatingTimeEntity() {}
 
-    public HolidaysOperatingTimesEntity(LocalDate date, LocalTime openingTime, LocalTime closingTime,
-                                        LocalTime breakStartTime, LocalTime breakFinishTime, boolean isClosed){
+    public HolidayOperatingTimeEntity(LocalDate date, LocalTime openingTime, LocalTime closingTime,
+                                      LocalTime breakStartTime, LocalTime breakFinishTime, boolean isClosed){
         this.date = date;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
