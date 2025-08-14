@@ -64,5 +64,7 @@ public class HospitalService {
     //병원 업무 시간 등록 주간 일괄 등록
     //병원 업무 시간 수정
     //공휴일 업무 여부 등록
-    public void updateOperatingTime(Long hospitalId, List<OperatingTime> operatingTimes) {}
+    public void updateOperatingTime(Long hospitalId, List<OperatingTime> operatingTimes) {
+        hospitalWriter.updaterOperatingTimes(hospitalId, operatingTimes);
+    }
 }

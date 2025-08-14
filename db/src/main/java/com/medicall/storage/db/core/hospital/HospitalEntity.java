@@ -43,10 +43,10 @@ public class HospitalEntity extends BaseEntity {
     private final List<AppointmentEntity> appointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<OperatingTimesEntity> operatingTimes = new ArrayList<>();
+    private final List<OperatingTimeEntity> operatingTimes = new ArrayList<>();
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<HolidaysOperatingTimesEntity> holidaysOperatingTimes = new ArrayList<>();
+    private final List<HolidayOperatingTimeEntity> holidaysOperatingTimes = new ArrayList<>();
 
     @Column(nullable = false)
     private RegistrationStatus registrationStatus;
@@ -89,7 +89,7 @@ public class HospitalEntity extends BaseEntity {
         return departments;
     }
 
-    public List<OperatingTimesEntity> getOperatingTimes() {
+    public List<OperatingTimeEntity> getOperatingTimes() {
         return operatingTimes;
     }
 
@@ -97,7 +97,7 @@ public class HospitalEntity extends BaseEntity {
         return registrationStatus;
     }
 
-    public List<HolidaysOperatingTimesEntity> getHolidaysOperatingTimes() {
+    public List<HolidayOperatingTimeEntity> getHolidaysOperatingTimes() {
         return holidaysOperatingTimes;
     }
 
@@ -114,11 +114,11 @@ public class HospitalEntity extends BaseEntity {
         departments.add(hospitalDepartmentEntity);
     }
 
-    public void addOperatingTimes(List<OperatingTimesEntity> operatingTimes) {
+    public void addOperatingTimes(List<OperatingTimeEntity> operatingTimes) {
         operatingTimes.forEach(this::addOperatingTime);
     }
 
-    public void addOperatingTime(OperatingTimesEntity operatingTime) {
+    public void addOperatingTime(OperatingTimeEntity operatingTime) {
         operatingTimes.add(operatingTime);
     }
 
@@ -130,7 +130,7 @@ public class HospitalEntity extends BaseEntity {
                 this.address.toDomainModel(),
                 this.imageUrl,
                 this.departments.stream().map(HospitalDepartmentEntity::getDepartment).map(DepartmentEntity::toDomainModel).toList(),
-                this.operatingTimes.stream().map(OperatingTimesEntity::toDomainModel).toList(),
+                this.operatingTimes.stream().map(OperatingTimeEntity::toDomainModel).toList(),
                 this.businessStatus
         );
     }

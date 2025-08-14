@@ -2,7 +2,6 @@ package com.medicall.storage.db.core.hospital;
 
 
 import com.medicall.domain.appointment.Appointment;
-import com.medicall.domain.hospital.Hospital;
 import com.medicall.domain.hospital.HospitalRepository;
 import com.medicall.domain.hospital.NewHospital;
 import com.medicall.domain.hospital.OperatingTime;
@@ -13,8 +12,12 @@ import com.medicall.storage.db.core.department.DepartmentEntity;
 import com.medicall.storage.db.core.department.DepartmentJpaRepository;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.doctor.DoctorJpaRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class HospitalCoreRepository implements HospitalRepository {
 
@@ -22,15 +25,18 @@ public class HospitalCoreRepository implements HospitalRepository {
     private final DepartmentJpaRepository departmentJpaRepository;
     private final AppointmentJpaRepository appointmentJpaRepository;
     private final DoctorJpaRepository doctorJpaRepository;
+    private final JPAQueryFactory queryFactory;
 
     public HospitalCoreRepository(HospitalJpaRepository hospitalJpaRepository,
                                   DepartmentJpaRepository departmentJpaRepository,
                                   AppointmentJpaRepository appointmentJpaRepository,
-                                  DoctorJpaRepository doctorJpaRepository) {
+                                  DoctorJpaRepository doctorJpaRepository,
+                                  JPAQueryFactory queryFactory) {
         this.hospitalJpaRepository = hospitalJpaRepository;
         this.departmentJpaRepository = departmentJpaRepository;
         this.appointmentJpaRepository = appointmentJpaRepository;
         this.doctorJpaRepository = doctorJpaRepository;
+        this.queryFactory = queryFactory;
     }
     public Long save(NewHospital newHospital, List<OperatingTime> operatingTimes){
         AddressEntity addressEntity = new AddressEntity(newHospital.address().zoneCode(),
@@ -52,7 +58,7 @@ public class HospitalCoreRepository implements HospitalRepository {
         savedHospitalEntity.addDepartments(departmentEntities);
 
         for(OperatingTime operatingTime : operatingTimes){
-            OperatingTimesEntity operatingTimesEntity = new OperatingTimesEntity(
+            OperatingTimeEntity operatingTimesEntity = new OperatingTimeEntity(
                     savedHospitalEntity,
                     operatingTime.dayOfWeek(),
                     operatingTime.openingTime(),
@@ -65,13 +71,6 @@ public class HospitalCoreRepository implements HospitalRepository {
         }
 
         return hospitalJpaRepository.save(savedHospitalEntity).getId();
-    }
-
-    public Optional<Hospital> findByName(String name){
-        return null;
-    }
-    public Optional<Hospital> findById(Long id){
-        return null;
     }
 
     public List<Appointment> findAppointmentsByHospitalId(Long hospitalId){
@@ -99,8 +98,51 @@ public class HospitalCoreRepository implements HospitalRepository {
         return appointmentId;
     }
 
-    public void registerOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes){
-        HospitalEntity hospitalEntity = hospitalJpaRepository.getReferenceById(hospitalId);
+    public void updateOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes){
+        HospitalEntity hospitalEntity = findWithOperationTimesById(hospitalId).orElseThrow();
 
+        Map<DayOfWeek, OperatingTimeEntity> existingTimesMap = hospitalEntity.getOperatingTimes()
+                .stream().collect(Collectors.toMap(OperatingTimeEntity::getDayOfWeek, operatingTimeEntity -> operatingTimeEntity));
+
+        Map<DayOfWeek, OperatingTime> newTimesMap = operatingTimes.stream()
+                .collect(Collectors.toMap(OperatingTime::dayOfWeek, operatingTimeEntity -> operatingTimeEntity));
+
+        newTimesMap.forEach((dayOfWeek, newTime) -> {
+            if(existingTimesMap.containsKey(dayOfWeek)){
+                existingTimesMap.get(dayOfWeek).updateFromDomainModel(newTime);
+            }
+            else{
+                OperatingTimeEntity operatingTimeEntity = new OperatingTimeEntity(
+                        hospitalEntity,
+                        dayOfWeek,
+                        newTime.openingTime(),
+                        newTime.closingTime(),
+                        newTime.breakStartTime(),
+                        newTime.breakFinishTime()
+                );
+                hospitalEntity.addOperatingTime(operatingTimeEntity);
+            }
+        });
+
+        List<DayOfWeek> toRemove = existingTimesMap.keySet().stream()
+                .filter(dayOfWeek -> !newTimesMap.containsKey(dayOfWeek))
+                .toList();
+
+        hospitalEntity.getOperatingTimes().removeIf(entity -> toRemove.contains(entity.getDayOfWeek()));
+
+        hospitalJpaRepository.save(hospitalEntity);
+    }
+
+    private Optional<HospitalEntity> findWithOperationTimesById(Long hospitalId){
+        QHospitalEntity hospitalEntity = QHospitalEntity.hospitalEntity;
+        QOperatingTimeEntity operatingTimeEntity = QOperatingTimeEntity.operatingTimeEntity;
+
+        HospitalEntity result = queryFactory
+                .selectFrom(hospitalEntity)
+                .leftJoin(hospitalEntity.operatingTimes, operatingTimeEntity).fetchJoin()
+                .where(hospitalEntity.id.eq(hospitalId))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }

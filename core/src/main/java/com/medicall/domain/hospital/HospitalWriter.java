@@ -22,7 +22,7 @@ public class HospitalWriter {
         return hospitalRepository.addDoctorOnAppointment(doctorId, appointmentId);
     }
 
-    public void registerOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes) {
-
+    public void updaterOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes) {
+        hospitalRepository.updateOperatingTimes(hospitalId, operatingTimes);
     }
 }

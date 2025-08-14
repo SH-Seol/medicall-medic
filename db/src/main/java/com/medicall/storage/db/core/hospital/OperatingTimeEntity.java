@@ -91,4 +91,12 @@ public class OperatingTimeEntity extends BaseEntity {
                 this.breakFinishTime
         );
     }
+
+    public void updateFromDomainModel(OperatingTime operatingTime){
+        this.openingTime = operatingTime.openingTime();
+        this.closingTime = operatingTime.closingTime();
+        this.breakStartTime = operatingTime.breakStartTime();
+        this.breakFinishTime = operatingTime.breakFinishTime();
+        this.isClosed = operatingTime.isClosed();
+    }
 }
