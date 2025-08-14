@@ -31,19 +31,22 @@ public class HospitalService {
         this.appointmentWriter = appointmentWriter;
     }
 
-    //생성
-    public Long create(NewHospital newHospital) {
-        return hospitalWriter.create(newHospital);
+    //병원 생성
+    public Long create(NewHospital newHospital, List<OperatingTime> operatingTimes) {
+        return hospitalWriter.create(newHospital, operatingTimes);
     }
+
     //예약 조회
     public List<Appointment> getAppointments(Long hospitalId) {
         return hospitalReader.getAppointments(hospitalId);
     }
 
+    //예약 거절
     public void rejectAppointment(Long hospitalId, Long appointmentId) {
         hospitalWriter.rejectAppointment(hospitalId, appointmentId);
     }
 
+    //의사 없는 요청 의사 배정
     public Long designateDoctorToAppointment(Long hospitalId, Long doctorId, Long appointmentId) {
         Doctor doctor = doctorReader.getDoctorById(doctorId);
         Appointment appointment = appointmentReader.getAppointmentById(appointmentId);
@@ -57,4 +60,9 @@ public class HospitalService {
 
         return appointment.id();
     }
+
+    //병원 업무 시간 등록 주간 일괄 등록
+    //병원 업무 시간 수정
+    //공휴일 업무 여부 등록
+    public void updateOperatingTime(Long hospitalId, List<OperatingTime> operatingTimes) {}
 }

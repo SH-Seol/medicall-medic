@@ -5,6 +5,7 @@ import com.medicall.domain.appointment.Appointment;
 import com.medicall.domain.hospital.Hospital;
 import com.medicall.domain.hospital.HospitalRepository;
 import com.medicall.domain.hospital.NewHospital;
+import com.medicall.domain.hospital.OperatingTime;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.appointment.AppointmentJpaRepository;
@@ -31,7 +32,7 @@ public class HospitalCoreRepository implements HospitalRepository {
         this.appointmentJpaRepository = appointmentJpaRepository;
         this.doctorJpaRepository = doctorJpaRepository;
     }
-    public Long save(NewHospital newHospital){
+    public Long save(NewHospital newHospital, List<OperatingTime> operatingTimes){
         AddressEntity addressEntity = new AddressEntity(newHospital.address().zoneCode(),
                 newHospital.address().roadAddress(),
                 newHospital.address().jibunAddress(),
@@ -49,6 +50,19 @@ public class HospitalCoreRepository implements HospitalRepository {
                 newHospital.imageUrl());
 
         savedHospitalEntity.addDepartments(departmentEntities);
+
+        for(OperatingTime operatingTime : operatingTimes){
+            OperatingTimesEntity operatingTimesEntity = new OperatingTimesEntity(
+                    savedHospitalEntity,
+                    operatingTime.dayOfWeek(),
+                    operatingTime.openingTime(),
+                    operatingTime.closingTime(),
+                    operatingTime.breakStartTime(),
+                    operatingTime.breakFinishTime()
+                    );
+
+            savedHospitalEntity.addOperatingTime(operatingTimesEntity);
+        }
 
         return hospitalJpaRepository.save(savedHospitalEntity).getId();
     }
@@ -83,5 +97,10 @@ public class HospitalCoreRepository implements HospitalRepository {
         appointmentEntity.addDoctor(doctorEntity);
 
         return appointmentId;
+    }
+
+    public void registerOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes){
+        HospitalEntity hospitalEntity = hospitalJpaRepository.getReferenceById(hospitalId);
+
     }
 }
