@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.medicine;
 
+import com.medicall.domain.medicine.Medicine;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,5 +31,14 @@ public class MedicineEntity extends BaseEntity {
     }
     public String getUnit() {
         return unit;
+    }
+
+    public Medicine toDomainModel(){
+        return new Medicine(
+                this.id,
+                this.name,
+                this.manufacturer,
+                this.unit
+        );
     }
 }
