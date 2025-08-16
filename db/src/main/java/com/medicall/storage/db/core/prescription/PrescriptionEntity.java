@@ -1,7 +1,9 @@
 package com.medicall.storage.db.core.prescription;
 
+import com.medicall.domain.prescription.Prescription;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
+import com.medicall.storage.db.core.hospital.HospitalEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +26,10 @@ public class PrescriptionEntity extends BaseEntity {
     @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorEntity doctor;
 
+    @ManyToOne
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private HospitalEntity hospital;
+
     @OneToMany(mappedBy = "prescription_id", cascade = CascadeType.ALL, orphanRemoval = true)
     List<PrescriptionMedicineEntity> PrescriptionMedicineList = new ArrayList<>();
 
@@ -32,9 +38,10 @@ public class PrescriptionEntity extends BaseEntity {
 
     protected PrescriptionEntity() {}
 
-    public PrescriptionEntity(PatientEntity patient, DoctorEntity doctor, LocalDate prescriptionDate) {
+    public PrescriptionEntity(PatientEntity patient, DoctorEntity doctor, HospitalEntity hospital, LocalDate prescriptionDate) {
         this.patient = patient;
         this.doctor = doctor;
+        this.hospital = hospital;
         this.prescriptionDate = prescriptionDate;
     }
 
@@ -46,11 +53,26 @@ public class PrescriptionEntity extends BaseEntity {
         return doctor;
     }
 
+    public HospitalEntity getHospital() {
+        return hospital;
+    }
+
     public LocalDate getPrescriptionDate() {
         return prescriptionDate;
     }
 
     public List<PrescriptionMedicineEntity> getPrescriptionMedicineList() {
         return PrescriptionMedicineList;
+    }
+
+    public Prescription toDomainModel(){
+        return new Prescription(
+                this.id,
+                this.patient.toDomainModel(),
+                this.PrescriptionMedicineList.stream().map(PrescriptionMedicineEntity::toDomainModel).toList(),
+                this.hospital.toDomainModel(),
+                this.doctor.toDomainModel(),
+                this.prescriptionDate
+        );
     }
 }

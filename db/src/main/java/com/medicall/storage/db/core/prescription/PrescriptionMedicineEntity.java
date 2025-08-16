@@ -1,5 +1,6 @@
 package com.medicall.storage.db.core.prescription;
 
+import com.medicall.domain.prescription.PrescriptionMedicine;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.medicine.MedicineEntity;
 import jakarta.persistence.Column;
@@ -70,5 +71,16 @@ public class PrescriptionMedicineEntity extends BaseEntity {
 
     public String getInstruction() {
         return instruction;
+    }
+
+    public PrescriptionMedicine toDomainModel(){
+        return new PrescriptionMedicine(
+                this.medicine.toDomainModel(),
+                this.dosage,
+                this.dosageUnit,
+                this.quantity,
+                this.frequency,
+                this.instruction
+        );
     }
 }
