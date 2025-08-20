@@ -2,9 +2,12 @@ package com.medicall.storage.db.core.hospital;
 
 
 import com.medicall.domain.appointment.Appointment;
+import com.medicall.domain.hospital.Hospital;
 import com.medicall.domain.hospital.HospitalRepository;
 import com.medicall.domain.hospital.NewHospital;
 import com.medicall.domain.hospital.OperatingTime;
+import com.medicall.error.CoreErrorType;
+import com.medicall.error.CoreException;
 import com.medicall.storage.db.core.address.AddressEntity;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.appointment.AppointmentJpaRepository;
@@ -99,7 +102,8 @@ public class HospitalCoreRepository implements HospitalRepository {
     }
 
     public void updateOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes){
-        HospitalEntity hospitalEntity = findWithOperationTimesById(hospitalId).orElseThrow();
+        HospitalEntity hospitalEntity = findWithOperationTimesById(hospitalId).orElseThrow(
+                () -> new CoreException(CoreErrorType.HOSPITAL_NOT_FOUND));
 
         Map<DayOfWeek, OperatingTimeEntity> existingTimesMap = hospitalEntity.getOperatingTimes()
                 .stream().collect(Collectors.toMap(OperatingTimeEntity::getDayOfWeek, operatingTimeEntity -> operatingTimeEntity));
@@ -131,6 +135,10 @@ public class HospitalCoreRepository implements HospitalRepository {
         hospitalEntity.getOperatingTimes().removeIf(entity -> toRemove.contains(entity.getDayOfWeek()));
 
         hospitalJpaRepository.save(hospitalEntity);
+    }
+
+    public Optional<Hospital> findById(Long hospitalId){
+        return hospitalJpaRepository.findById(hospitalId).map(HospitalEntity::toDomainModel);
     }
 
     private Optional<HospitalEntity> findWithOperationTimesById(Long hospitalId){

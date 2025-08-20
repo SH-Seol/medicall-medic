@@ -22,7 +22,7 @@ public class DoctorService {
     }
 
     public Long createDoctor(NewDoctor newDoctor){
-        Department department = departmentReader.findById(newDoctor.departmentId()).orElse(null);
+        Department department = departmentReader.findById(newDoctor.departmentId());
         Doctor doctorToCreate = new Doctor(newDoctor.name(), newDoctor.introduction(), newDoctor.imageUrl(), department);
         return doctorWriter.createDoctor(doctorToCreate);
     }
@@ -31,7 +31,7 @@ public class DoctorService {
         return doctorReader.getDoctorAppointments(doctor);
     }
 
-    public Doctor getDoctorById(Long doctorId){
-        return doctorReader.getDoctorById(doctorId);
+    public Doctor findById(Long doctorId){
+        return doctorReader.findById(doctorId);
     }
 }

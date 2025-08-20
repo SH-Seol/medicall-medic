@@ -1,6 +1,8 @@
 package com.medicall.domain.doctor;
 
 import com.medicall.domain.appointment.Appointment;
+import com.medicall.error.CoreErrorType;
+import com.medicall.error.CoreException;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,7 @@ public class DoctorReader {
         return doctorRepository.getAppointmentsByDoctor(doctor);
     }
 
-    public Doctor getDoctorById(Long doctorId){
-        return doctorRepository.getDoctorById(doctorId);
+    public Doctor findById(Long doctorId){
+        return doctorRepository.findById(doctorId).orElseThrow(() -> new CoreException(CoreErrorType.DOCTOR_NOT_FOUND));
     }
 }

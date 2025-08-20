@@ -1,5 +1,7 @@
 package com.medicall.domain.Patient;
 
+import com.medicall.error.CoreErrorType;
+import com.medicall.error.CoreException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +14,6 @@ public class PatientReader {
     }
 
     public Patient getPatient(Long patientId){
-        return patientRepository.getPatient(patientId);
+        return patientRepository.findById(patientId).orElseThrow(() -> new CoreException(CoreErrorType.PATIENT_NOT_FOUND));
     }
 }

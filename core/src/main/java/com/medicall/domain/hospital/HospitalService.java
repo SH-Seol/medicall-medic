@@ -48,7 +48,7 @@ public class HospitalService {
 
     //의사 없는 요청 의사 배정
     public Long designateDoctorToAppointment(Long hospitalId, Long doctorId, Long appointmentId) {
-        Doctor doctor = doctorReader.getDoctorById(doctorId);
+        Doctor doctor = doctorReader.findById(doctorId);
         Appointment appointment = appointmentReader.getAppointmentById(appointmentId);
         if(!appointment.hospital().id().equals(hospitalId)){
             throw new IllegalArgumentException("병원의 예약이 아닙니다.");

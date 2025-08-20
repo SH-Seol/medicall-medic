@@ -1,5 +1,7 @@
 package com.medicall.domain.appointment;
 
+import com.medicall.error.CoreErrorType;
+import com.medicall.error.CoreException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +14,6 @@ public class AppointmentReader {
     }
 
     public Appointment getAppointmentById(Long appointmentId) {
-        return appointmentRepository.getAppointmentById(appointmentId).orElse(null);
+        return appointmentRepository.findById(appointmentId).orElseThrow(() -> new CoreException(CoreErrorType.APPOINTMENT_NOT_FOUND));
     }
 }

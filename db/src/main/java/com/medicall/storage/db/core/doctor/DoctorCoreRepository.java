@@ -40,7 +40,7 @@ public class DoctorCoreRepository implements DoctorRepository {
                 .toList();
     }
 
-    public Doctor getDoctorById(Long doctorId) {
-        return doctorJpaRepository.findById(doctorId).get().toDomainModel();
+    public Optional<Doctor> findById(Long doctorId) {
+        return doctorJpaRepository.findById(doctorId).map(DoctorEntity::toDomainModel);
     }
 }

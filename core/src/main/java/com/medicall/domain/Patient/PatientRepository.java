@@ -1,5 +1,7 @@
 package com.medicall.domain.Patient;
 
+import java.util.Optional;
+
 public interface PatientRepository {
-    Patient getPatient(Long patientId);
+    Optional<Patient> findById(Long patientId);
 }

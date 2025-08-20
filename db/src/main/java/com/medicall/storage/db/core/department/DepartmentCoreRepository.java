@@ -13,8 +13,7 @@ public class DepartmentCoreRepository implements DepartmentRepository {
     }
 
     public Optional<Department> findById(Long id){
-        Optional<DepartmentEntity> optional = departmentJpaRepository.findById(id);
-        return optional.map(this::toDomainModel);
+        return departmentJpaRepository.findById(id).map(this::toDomainModel);
     }
 
     private Department toDomainModel(DepartmentEntity departmentEntity){

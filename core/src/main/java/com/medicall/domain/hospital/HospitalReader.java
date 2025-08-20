@@ -1,6 +1,8 @@
 package com.medicall.domain.hospital;
 
 import com.medicall.domain.appointment.Appointment;
+import com.medicall.error.CoreErrorType;
+import com.medicall.error.CoreException;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -15,5 +17,9 @@ public class HospitalReader {
 
     public List<Appointment> getAppointments(Long hospitalId) {
         return hospitalRepository.findAppointmentsByHospitalId(hospitalId);
+    }
+
+    public Hospital findById(Long hospitalId) {
+        return hospitalRepository.findById(hospitalId).orElseThrow(() -> new CoreException(CoreErrorType.HOSPITAL_NOT_FOUND));
     }
 }

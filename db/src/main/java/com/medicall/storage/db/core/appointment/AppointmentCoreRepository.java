@@ -18,7 +18,7 @@ public class AppointmentCoreRepository implements AppointmentRepository {
         this.doctorJpaRepository = doctorJpaRepository;
     }
 
-    public Optional<Appointment> getAppointmentById(Long appointmentId){
+    public Optional<Appointment> findById(Long appointmentId){
         return appointmentJpaRepository.findById(appointmentId).map(AppointmentEntity::toDomainModel);
     }
 
