@@ -55,8 +55,17 @@ public class PrescriptionService {
         return prescriptionWriter.save(newPrescription);
     }
 
-    public List<Prescription> getPrescriptionsByPatientIdAndDoctorId(Long patientId, Long doctorId) {
-        return prescriptionReader.getAllPrescriptionsByPatientIdAndDoctorId(patientId, doctorId);
+    public List<ReadPrescriptionResponse> getPrescriptionsByPatientIdAndDoctorId(Long patientId, Long doctorId) {
+        List<Prescription> prescriptions = prescriptionReader.getAllPrescriptionsByPatientIdAndDoctorId(patientId, doctorId);
+        return prescriptions.stream().map(pd -> new ReadPrescriptionResponse(
+                pd.id(),
+                pd.patient(),
+                pd.medicines(),
+                pd.hospital(),
+                pd.doctor(),
+                pd.treatment(),
+                pd.date()
+        )).toList();
     }
 
     public ReadPrescriptionResponse getPrescriptionById(Long prescriptionId) {
