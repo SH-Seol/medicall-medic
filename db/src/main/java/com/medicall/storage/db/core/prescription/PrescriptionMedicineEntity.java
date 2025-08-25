@@ -40,9 +40,20 @@ public class PrescriptionMedicineEntity extends BaseEntity {
 
     protected PrescriptionMedicineEntity() {}
 
-    public PrescriptionMedicineEntity(MedicineEntity medicine, PrescriptionEntity prescription){
+    public PrescriptionMedicineEntity(MedicineEntity medicine,
+                                      PrescriptionEntity prescription,
+                                      double dosage,
+                                      String dosageUnit,
+                                      int quantity,
+                                      String frequency,
+                                      String instruction){
         this.medicine = medicine;
         this.prescription = prescription;
+        this.dosage = dosage;
+        this.dosageUnit = dosageUnit;
+        this.quantity = quantity;
+        this.frequency = frequency;
+        this.instruction = instruction;
     }
 
     public MedicineEntity getMedicine() {
@@ -82,5 +93,9 @@ public class PrescriptionMedicineEntity extends BaseEntity {
                 this.frequency,
                 this.instruction
         );
+    }
+
+    public void addPrescription(PrescriptionEntity prescriptionEntity){
+        this.prescription = prescriptionEntity;
     }
 }

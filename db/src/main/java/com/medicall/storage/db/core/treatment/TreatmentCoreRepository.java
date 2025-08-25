@@ -10,6 +10,7 @@ import com.medicall.storage.db.core.patient.PatientEntity;
 import com.medicall.storage.db.core.patient.PatientJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class TreatmentCoreRepository implements TreatmentRepository {
 
@@ -50,5 +51,9 @@ public class TreatmentCoreRepository implements TreatmentRepository {
                 treatment.detailedTreatment());
 
         return treatmentJpaRepository.save(treatmentEntity).getId();
+    }
+
+    public Optional<Treatment> findById(Long treatmentId){
+        return treatmentJpaRepository.findById(treatmentId).map(TreatmentEntity::toDomainModel);
     }
 }

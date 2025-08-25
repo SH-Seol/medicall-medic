@@ -23,7 +23,7 @@ public class DoctorService {
 
     public Long createDoctor(NewDoctor newDoctor){
         Department department = departmentReader.findById(newDoctor.departmentId());
-        Doctor doctorToCreate = new Doctor(newDoctor.name(), newDoctor.introduction(), newDoctor.imageUrl(), department);
+        Doctor doctorToCreate = new Doctor(newDoctor.name(), newDoctor.introduction(), null, newDoctor.imageUrl(), department);
         return doctorWriter.createDoctor(doctorToCreate);
     }
 

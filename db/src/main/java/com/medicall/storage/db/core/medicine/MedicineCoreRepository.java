@@ -3,6 +3,8 @@ package com.medicall.storage.db.core.medicine;
 import com.medicall.domain.medicine.Medicine;
 import com.medicall.domain.medicine.MedicineRepository;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MedicineCoreRepository implements MedicineRepository {
 
@@ -16,5 +18,12 @@ public class MedicineCoreRepository implements MedicineRepository {
         List<MedicineEntity> medicineEntities = medicineJpaRepository.findTop5ByNameContaining(keyword);
 
         return medicineEntities.stream().map(MedicineEntity::toDomainModel).toList();
+    }
+
+    public Set<Long> isExistMedicine(List<Long> medicineIds) {
+        List<MedicineEntity> foundMedicines = medicineJpaRepository.findAllById(medicineIds);
+
+        return foundMedicines.stream().
+                map(MedicineEntity::getId).collect(Collectors.toSet());
     }
 }

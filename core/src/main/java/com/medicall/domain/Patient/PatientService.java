@@ -11,7 +11,7 @@ public class PatientService {
         this.patientReader = patientReader;
     }
 
-    public Patient getPatient(Long patientId){
-        return patientReader.getPatient(patientId);
+    public Patient findById(Long patientId){
+        return patientReader.findById(patientId);
     }
 }

@@ -4,6 +4,7 @@ import com.medicall.domain.doctor.Doctor;
 import com.medicall.storage.db.core.appointment.AppointmentEntity;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.department.DepartmentEntity;
+import com.medicall.storage.db.core.hospital.HospitalEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,10 @@ public class DoctorEntity extends BaseEntity {
     private String imageUrl;
 
     private String introduction;
+
+    @ManyToOne
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private HospitalEntity hospital;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
@@ -46,6 +51,10 @@ public class DoctorEntity extends BaseEntity {
         return imageUrl;
     }
 
+    public HospitalEntity getHospital() {
+        return hospital;
+    }
+
     public String getIntroduction() {
         return introduction;
     }
@@ -62,6 +71,7 @@ public class DoctorEntity extends BaseEntity {
         return new Doctor(
                 this.id,
                 this.name,
+                this.hospital.toDomainModel(),
                 this.introduction,
                 this.imageUrl,
                 this.department.toDomainModel()

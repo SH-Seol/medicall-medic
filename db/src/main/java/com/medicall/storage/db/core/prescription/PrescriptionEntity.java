@@ -5,12 +5,14 @@ import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.hospital.HospitalEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
+import com.medicall.storage.db.core.treatment.TreatmentEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +32,29 @@ public class PrescriptionEntity extends BaseEntity {
     @JoinColumn(name = "hospital_id", nullable = false)
     private HospitalEntity hospital;
 
-    @OneToMany(mappedBy = "prescription_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<PrescriptionMedicineEntity> PrescriptionMedicineList = new ArrayList<>();
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PrescriptionMedicineEntity> PrescriptionMedicineList = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "treatment_id", unique = true)
+    private TreatmentEntity treatment;
 
     @Column(nullable = false)
     private LocalDate prescriptionDate;
 
     protected PrescriptionEntity() {}
 
-    public PrescriptionEntity(PatientEntity patient, DoctorEntity doctor, HospitalEntity hospital, LocalDate prescriptionDate) {
+    public PrescriptionEntity(PatientEntity patient,
+                              DoctorEntity doctor,
+                              HospitalEntity hospital,
+                              List<PrescriptionMedicineEntity> prescriptionMedicineList,
+                              TreatmentEntity treatment,
+                              LocalDate prescriptionDate) {
         this.patient = patient;
         this.doctor = doctor;
         this.hospital = hospital;
+        this.PrescriptionMedicineList = prescriptionMedicineList;
+        this.treatment = treatment;
         this.prescriptionDate = prescriptionDate;
     }
 
@@ -61,6 +74,10 @@ public class PrescriptionEntity extends BaseEntity {
         return prescriptionDate;
     }
 
+    public TreatmentEntity getTreatment() {
+        return treatment;
+    }
+
     public List<PrescriptionMedicineEntity> getPrescriptionMedicineList() {
         return PrescriptionMedicineList;
     }
@@ -72,7 +89,13 @@ public class PrescriptionEntity extends BaseEntity {
                 this.PrescriptionMedicineList.stream().map(PrescriptionMedicineEntity::toDomainModel).toList(),
                 this.hospital.toDomainModel(),
                 this.doctor.toDomainModel(),
+                this.treatment.toDomainModel(),
                 this.prescriptionDate
         );
+    }
+
+    public void addPrescriptionMedicine(PrescriptionMedicineEntity prescriptionMedicineEntity) {
+        this.PrescriptionMedicineList.add(prescriptionMedicineEntity);
+        prescriptionMedicineEntity.addPrescription(this);
     }
 }

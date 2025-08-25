@@ -13,7 +13,7 @@ public class PatientReader {
         this.patientRepository = patientRepository;
     }
 
-    public Patient getPatient(Long patientId){
+    public Patient findById(Long patientId){
         return patientRepository.findById(patientId).orElseThrow(() -> new CoreException(CoreErrorType.PATIENT_NOT_FOUND));
     }
 }

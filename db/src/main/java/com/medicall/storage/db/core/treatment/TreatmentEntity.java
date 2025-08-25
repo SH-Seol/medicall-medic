@@ -4,11 +4,13 @@ import com.medicall.domain.treatment.Treatment;
 import com.medicall.storage.db.core.common.domain.BaseEntity;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
 import com.medicall.storage.db.core.patient.PatientEntity;
+import com.medicall.storage.db.core.prescription.PrescriptionEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class TreatmentEntity extends BaseEntity {
@@ -26,6 +28,10 @@ public class TreatmentEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String treatment;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prescription_id", unique = true)
+    private PrescriptionEntity prescription;
 
     private String detailTreatment;
 
@@ -61,11 +67,13 @@ public class TreatmentEntity extends BaseEntity {
 
     public Treatment toDomainModel(){
         return new Treatment(
+                this.id,
                 this.patient.toDomainModel(),
                 this.doctor.toDomainModel(),
                 this.symptom,
                 this.treatment,
-                this.detailTreatment
+                this.detailTreatment,
+                this.prescription.toDomainModel()
         );
     }
 }
