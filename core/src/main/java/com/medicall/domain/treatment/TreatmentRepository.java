@@ -5,6 +5,6 @@ import java.util.Optional;
 
 public interface TreatmentRepository {
     List<Treatment> getTreatmentsByPatientId(Long patientId, Long doctorId);
-    Long saveTreatment(Treatment treatment);
+    Long save(NewTreatment treatment);
     Optional<Treatment> findById(Long treatmentId);
 }

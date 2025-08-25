@@ -2,6 +2,7 @@ package com.medicall.storage.db.core.treatment;
 
 import static com.medicall.storage.db.core.treatment.QTreatmentEntity.treatmentEntity;
 
+import com.medicall.domain.treatment.NewTreatment;
 import com.medicall.domain.treatment.Treatment;
 import com.medicall.domain.treatment.TreatmentRepository;
 import com.medicall.storage.db.core.doctor.DoctorEntity;
@@ -39,10 +40,10 @@ public class TreatmentCoreRepository implements TreatmentRepository {
         return entities.stream().map(TreatmentEntity::toDomainModel).toList();
     }
 
-    public Long saveTreatment(Treatment treatment) {
-        PatientEntity patientEntity = patientJpaRepository.getReferenceById(treatment.patient()
-                .id());
-        DoctorEntity doctorEntity = doctorJpaRepository.getReferenceById(treatment.doctor().id());
+    public Long save(NewTreatment treatment) {
+        PatientEntity patientEntity = patientJpaRepository.getReferenceById(treatment.patientId());
+        DoctorEntity doctorEntity = doctorJpaRepository.getReferenceById(treatment.doctorId());
+
         TreatmentEntity treatmentEntity = new TreatmentEntity(
                 patientEntity,
                 doctorEntity,

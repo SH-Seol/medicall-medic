@@ -1,5 +1,6 @@
 package com.medicall.domain.treatment;
 
+import com.medicall.domain.treatment.dto.CreatePrescriptionRequest;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,13 @@ public class TreatmentService {
     }
 
     //진료 기록 작성
-    public Long addTreatment(Treatment treatment) {
+    public Long addTreatment(Long doctorId, CreatePrescriptionRequest request) {
+        NewTreatment treatment = new NewTreatment(
+                request.patientId(),
+                doctorId,
+                request.symptoms(),
+                request.treatment(),
+                request.detailedTreatment());
         return treatmentWriter.addTreatment(treatment);
     }
 

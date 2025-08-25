@@ -12,7 +12,7 @@ public class TreatmentWriter {
     }
 
     //환자 treatment 작성
-    public Long addTreatment(Treatment treatment) {
-        return treatmentRepository.saveTreatment(treatment);
+    public Long addTreatment(NewTreatment treatment) {
+        return treatmentRepository.save(treatment);
     }
 }
