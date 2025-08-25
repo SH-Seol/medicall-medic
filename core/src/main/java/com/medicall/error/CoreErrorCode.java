@@ -10,6 +10,7 @@ public enum CoreErrorCode {
     TREATMENT001("TREATMENT-001"),
     TREATMENT002("TREATMENT-002"),
     MEDICINE001("MEDICINE-001"),
+    PRESENTATION001("PRESENTATION-001"),
     ;
     private final String code;
 
