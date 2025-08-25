@@ -1,6 +1,5 @@
 package com.medicall.domain.treatment;
 
-import com.medicall.domain.doctor.Doctor;
 import com.medicall.error.CoreErrorType;
 import com.medicall.error.CoreException;
 import java.util.List;
@@ -23,4 +22,6 @@ public class TreatmentReader {
     public Treatment findById(Long treatmentId){
         return treatmentRepository.findById(treatmentId).orElseThrow(() -> new CoreException(CoreErrorType.TREATMENT_NOT_FOUND));
     }
+
+
 }
