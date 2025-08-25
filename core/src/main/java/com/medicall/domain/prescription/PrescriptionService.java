@@ -2,6 +2,7 @@ package com.medicall.domain.prescription;
 
 import com.medicall.domain.medicine.MedicineValidator;
 import com.medicall.domain.prescription.dto.CreatePrescriptionRequest;
+import com.medicall.domain.prescription.dto.ReadPrescriptionResponse;
 import com.medicall.domain.treatment.Treatment;
 import com.medicall.domain.treatment.TreatmentReader;
 import com.medicall.domain.treatment.TreatmentValidator;
@@ -56,5 +57,19 @@ public class PrescriptionService {
 
     public List<Prescription> getPrescriptionsByPatientIdAndDoctorId(Long patientId, Long doctorId) {
         return prescriptionReader.getAllPrescriptionsByPatientIdAndDoctorId(patientId, doctorId);
+    }
+
+    public ReadPrescriptionResponse getPrescriptionById(Long prescriptionId) {
+        Prescription prescription = prescriptionReader.getPrescriptionById(prescriptionId);
+
+        return new ReadPrescriptionResponse(
+                prescription.id(),
+                prescription.patient(),
+                prescription.medicines(),
+                prescription.hospital(),
+                prescription.doctor(),
+                prescription.treatment(),
+                prescription.date()
+        );
     }
 }

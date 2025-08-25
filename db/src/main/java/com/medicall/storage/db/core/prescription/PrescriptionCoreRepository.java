@@ -16,6 +16,7 @@ import com.medicall.storage.db.core.treatment.TreatmentJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -109,5 +110,11 @@ public class PrescriptionCoreRepository implements PrescriptionRepository {
                 }).toList();
 
         prescriptionMedicineEntities.forEach(prescriptionEntity::addPrescriptionMedicine);
+    }
+
+    public Optional<Prescription> getPrescriptionById(Long prescriptionId) {
+        Optional<PrescriptionEntity> prescriptionEntityOptional = prescriptionJpaRepository.findById(prescriptionId);
+
+        return prescriptionEntityOptional.map(PrescriptionEntity::toDomainModel);
     }
 }
