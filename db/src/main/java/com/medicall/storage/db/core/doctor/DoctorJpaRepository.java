@@ -9,4 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface DoctorJpaRepository extends JpaRepository<DoctorEntity, Long> {
     @Query("SELECT d FROM DoctorEntity d JOIN FETCH d.hospital WHERE d.id = :doctorId")
     DoctorEntity findByIdWithHospital(@Param("doctorId") Long doctorId);
+
+    @Query("SELECT d FROM DoctorEntity d LEFT JOIN FETCH d.hospital WHERE d.id = :doctorId")
+    DoctorEntity findByIdWithOptionalHospital(@Param("doctorId") Long doctorId);
+
 }

@@ -24,7 +24,7 @@ public class DoctorEntity extends BaseEntity {
     private String introduction;
 
     @ManyToOne
-    @JoinColumn(name = "hospital_id", nullable = false)
+    @JoinColumn(name = "hospital_id")
     private HospitalEntity hospital;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -71,10 +71,14 @@ public class DoctorEntity extends BaseEntity {
         return new Doctor(
                 this.id,
                 this.name,
-                this.hospital.toDomainModel(),
+                this.hospital != null ? this.hospital.toDomainModel() : null,
                 this.introduction,
                 this.imageUrl,
                 this.department.toDomainModel()
         );
+    }
+
+    public void registerHospital(HospitalEntity hospital){
+        this.hospital = hospital;
     }
 }

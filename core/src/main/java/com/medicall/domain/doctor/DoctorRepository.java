@@ -8,4 +8,5 @@ public interface DoctorRepository {
     Long save(Doctor newDoctor);
     List<Appointment> getAppointmentsByDoctor(Doctor doctor);
     Optional<Doctor> findById(Long id);
+    boolean isDoctorBelongsToHospital(Long doctorId);
 }

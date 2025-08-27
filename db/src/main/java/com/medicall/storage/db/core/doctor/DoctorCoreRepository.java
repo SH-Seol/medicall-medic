@@ -43,4 +43,10 @@ public class DoctorCoreRepository implements DoctorRepository {
     public Optional<Doctor> findById(Long doctorId) {
         return doctorJpaRepository.findById(doctorId).map(DoctorEntity::toDomainModel);
     }
+
+    public boolean isDoctorBelongsToHospital(Long doctorId) {
+        DoctorEntity doctorEntity = doctorJpaRepository.findByIdWithOptionalHospital(doctorId);
+
+        return doctorEntity.getHospital() != null;
+    }
 }
