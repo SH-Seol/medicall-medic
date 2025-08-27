@@ -22,4 +22,8 @@ public class HospitalReader {
     public Hospital findById(Long hospitalId) {
         return hospitalRepository.findById(hospitalId).orElseThrow(() -> new CoreException(CoreErrorType.HOSPITAL_NOT_FOUND));
     }
+
+    public List<Hospital> findAllByKeyword(String keyword) {
+        return hospitalRepository.findAllByKeyword(keyword);
+    }
 }

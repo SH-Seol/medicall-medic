@@ -5,6 +5,9 @@ import com.medicall.domain.appointment.AppointmentReader;
 import com.medicall.domain.appointment.AppointmentWriter;
 import com.medicall.domain.doctor.Doctor;
 import com.medicall.domain.doctor.DoctorReader;
+import com.medicall.domain.doctor.DoctorValidator;
+import com.medicall.domain.hospital.dto.ReadHospitalRequest;
+import com.medicall.domain.hospital.dto.ReadHospitalResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -18,17 +21,20 @@ public class HospitalService {
     private final DoctorReader doctorReader;
     private final AppointmentReader appointmentReader;
     private final AppointmentWriter appointmentWriter;
+    private final DoctorValidator doctorValidator;
 
     HospitalService(HospitalReader reader,
                     HospitalWriter writer,
                     DoctorReader doctorReader,
                     AppointmentReader appointmentReader,
-                    AppointmentWriter appointmentWriter) {
+                    AppointmentWriter appointmentWriter,
+                    DoctorValidator doctorValidator) {
         this.hospitalReader = reader;
         this.hospitalWriter = writer;
         this.doctorReader = doctorReader;
         this.appointmentReader = appointmentReader;
         this.appointmentWriter = appointmentWriter;
+        this.doctorValidator = doctorValidator;
     }
 
     //병원 생성
@@ -66,5 +72,19 @@ public class HospitalService {
     //공휴일 업무 여부 등록
     public void updateOperatingTime(Long hospitalId, List<OperatingTime> operatingTimes) {
         hospitalWriter.updaterOperatingTimes(hospitalId, operatingTimes);
+    }
+
+    public List<ReadHospitalResponse> readHospitalsByKeyword(ReadHospitalRequest request, Long doctorId) {
+        doctorValidator.validateDoctorBelongsToHospital(doctorId);
+        return hospitalReader.findAllByKeyword(request.keyword()).stream()
+                .map(hospital ->
+                        new ReadHospitalResponse(
+                                hospital.name(),
+                                hospital.telephoneNumber(),
+                                hospital.address(),
+                                hospital.imageUrl(),
+                                hospital.departments(),
+                                hospital.weeklySchedule()))
+                .toList();
     }
 }

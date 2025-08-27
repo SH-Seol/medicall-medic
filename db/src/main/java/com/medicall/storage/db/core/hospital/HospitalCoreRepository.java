@@ -141,6 +141,13 @@ public class HospitalCoreRepository implements HospitalRepository {
         return hospitalJpaRepository.findById(hospitalId).map(HospitalEntity::toDomainModel);
     }
 
+    public List<Hospital> findAllByKeyword(String keyword){
+        return hospitalJpaRepository.findByNameIgnoreCase(keyword.trim())
+                .stream()
+                .map(HospitalEntity::toDomainModel)
+                .toList();
+    }
+
     private Optional<HospitalEntity> findWithOperationTimesById(Long hospitalId){
         QHospitalEntity hospitalEntity = QHospitalEntity.hospitalEntity;
         QOperatingTimeEntity operatingTimeEntity = QOperatingTimeEntity.operatingTimeEntity;

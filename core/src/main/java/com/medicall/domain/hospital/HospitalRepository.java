@@ -11,4 +11,5 @@ public interface HospitalRepository {
     Long addDoctorOnAppointment(Long doctorId, Long appointmentId);
     void updateOperatingTimes(Long hospitalId, List<OperatingTime> operatingTimes);
     Optional<Hospital> findById(Long hospitalId);
+    List<Hospital> findAllByKeyword(String keyword);
 }
